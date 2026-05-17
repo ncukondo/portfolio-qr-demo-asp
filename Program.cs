@@ -1,5 +1,6 @@
 using DoctorPortfolioSite.Data;
 using DoctorPortfolioSite.Domain.Models;
+using DoctorPortfolioSite.Infrastructure.Seeding;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
@@ -25,6 +26,10 @@ builder.Services.AddIdentity<ApplicationUser, IdentityRole>(options =>
     .AddEntityFrameworkStores<ApplicationDbContext>()
     .AddDefaultTokenProviders();
 
+builder.Services.Configure<AdminSeedOptions>(builder.Configuration.GetSection(AdminSeedOptions.SectionName));
+builder.Services.AddScoped<RoleSeeder>();
+builder.Services.AddScoped<AdminSeeder>();
+
 var app = builder.Build();
 
 if (app.Environment.IsDevelopment())
@@ -35,6 +40,8 @@ if (app.Environment.IsDevelopment())
     {
         db.Database.Migrate();
     }
+    await scope.ServiceProvider.GetRequiredService<RoleSeeder>().SeedAsync();
+    await scope.ServiceProvider.GetRequiredService<AdminSeeder>().SeedAsync();
 }
 
 // Configure the HTTP request pipeline.
