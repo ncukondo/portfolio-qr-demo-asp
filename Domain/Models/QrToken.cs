@@ -13,10 +13,8 @@ public class QrToken
 
     public static QrToken Create(int courseId, string token, DateTimeOffset expiresAt, DateTimeOffset? now = null)
     {
-        if (courseId <= 0)
-            throw new ArgumentOutOfRangeException(nameof(courseId), "courseId must be positive.");
-        if (string.IsNullOrWhiteSpace(token))
-            throw new ArgumentException("token must not be empty.", nameof(token));
+        Guard.AgainstNonPositive(courseId);
+        Guard.AgainstBlank(token);
 
         var stamp = now ?? DateTimeOffset.UtcNow;
         if (expiresAt <= stamp)
