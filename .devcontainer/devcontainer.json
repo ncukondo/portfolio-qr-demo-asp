@@ -24,6 +24,6 @@
     }
   },
   "forwardPorts": [5000, 5001, 5432],
-  "postCreateCommand": "sudo npm install -g @anthropic-ai/claude-code && dotnet restore",
+  "postCreateCommand": "dotnet restore",
   "remoteUser": "vscode"
 }

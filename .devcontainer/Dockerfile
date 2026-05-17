@@ -8,15 +8,16 @@ RUN apt-get update && apt-get install -y \
     git \
     && rm -rf /var/lib/apt/lists/*
 
-# Install Node.js
-RUN curl -fsSL https://deb.nodesource.com/setup_22.x | bash - \
-    && apt-get install -y nodejs
-
 # Install Entity Framework Core tools
 RUN dotnet tool install --global dotnet-ef
 
-# Make sure dotnet tools are in PATH
-ENV PATH="${PATH}:/home/vscode/.dotnet/tools"
+# Install Claude Code (native single-binary installer, user-scoped)
+USER vscode
+RUN curl -fsSL https://claude.ai/install.sh | bash
+USER root
+
+# Make sure dotnet tools and Claude Code are in PATH
+ENV PATH="${PATH}:/home/vscode/.dotnet/tools:/home/vscode/.local/bin"
 
 # Set the working directory
 WORKDIR /workspace
