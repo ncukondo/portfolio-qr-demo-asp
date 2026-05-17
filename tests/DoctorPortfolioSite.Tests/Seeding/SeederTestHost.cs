@@ -13,6 +13,7 @@ internal static class SeederTestHost
     {
         var services = new ServiceCollection();
         services.AddLogging(b => b.AddDebug());
+        services.AddDataProtection();
         services.AddDbContext<ApplicationDbContext>(o => o.UseInMemoryDatabase(Guid.NewGuid().ToString()));
         services.AddIdentityCore<ApplicationUser>(o =>
             {
