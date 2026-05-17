@@ -26,7 +26,7 @@
 | T000 | [.gitignore 追加と build artifact untrack](tasks/T000-add-gitignore.md) | done | - | - | - |
 | T001 | [NuGet パッケージ追加](tasks/T001-add-nuget-packages.md) | done | T000 | - | - |
 | T002 | [テストプロジェクト作成](tasks/T002-setup-test-project.md) | done | T001 | - | - |
-| T003 | [ドメインモデル定義 (Course/Enrollment/Portfolio/QRCode)](tasks/T003-define-domain-models.md) | todo | T001 | - | - |
+| T003 | [ドメインモデル定義 (Course/Enrollment/Portfolio/QRCode)](tasks/T003-define-domain-models.md) | done | T001 | - | - |
 | T004 | [ApplicationDbContext 構成](tasks/T004-configure-dbcontext.md) | todo | T003 | - | - |
 | T005 | [PostgreSQL 接続と初回 migration](tasks/T005-postgresql-connection-and-migration.md) | todo | T004 | - | - |
 | T006 | [ASP.NET Core Identity セットアップ](tasks/T006-setup-identity.md) | todo | T005 | - | - |
