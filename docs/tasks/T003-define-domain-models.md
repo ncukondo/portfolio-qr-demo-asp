@@ -2,7 +2,7 @@
 id: T003
 title: ドメインモデル定義 (Course / Enrollment / Portfolio / QRCode)
 phase: 1
-status: todo
+status: done
 depends_on: [T001, T002]
 spec_refs: ["5.1"]
 layer: domain
@@ -18,14 +18,22 @@ PHP 元リポジトリ `database/` および `src/` のモデル相当部分を�
 
 ## 作業内容
 
-- [ ] `Domain/Models/Course.cs` を追加 (Title / Description / Credits / StartDate / EndDate / Venue / MaxParticipants / QRCodeSecret / 監査列)
-- [ ] `Domain/Models/Enrollment.cs` を追加 (UserId / CourseId / EnrolledAt / CompletedAt / Status enum / QRCodeScannedAt)
-- [ ] `Domain/Models/EnrollmentStatus.cs` enum を追加 (Enrolled / Completed / Cancelled)
-- [ ] `Domain/Models/Portfolio.cs` を追加
-- [ ] `Domain/Models/QrToken.cs` を追加 (CourseId / Token / ExpiresAt / IsUsed)
-- [ ] 不変条件をモデル内のメソッドで表現 (例: `Enrollment.MarkCompleted(DateTimeOffset now)`)
-- [ ] `tests/DoctorPortfolioSite.Tests/Domain/` に各モデルの単体テストを追加
-- [ ] タスクファイルの status を `done` に更新する commit を含める
+- [x] `Domain/Models/Course.cs` を追加 (Title / Description / Credits / StartDate / EndDate / Venue / MaxParticipants / QrCodeSecret / 監査列)
+- [x] `Domain/Models/Enrollment.cs` を追加 (UserId / CourseId / EnrolledAt / CompletedAt / Status / QrCodeScannedAt)
+- [x] `Domain/Models/EnrollmentStatus.cs` enum を追加 (Enrolled / Completed / Cancelled)
+- [x] `Domain/Models/Portfolio.cs` を追加 (UserId / Title / Description / LearningGoals / 監査列)
+- [x] `Domain/Models/QrToken.cs` を追加 (CourseId / Token / ExpiresAt / IsUsed)
+- [x] 不変条件をモデル内のメソッドで表現
+  - `Course.Create` (factory): タイトル / Credits / MaxParticipants / 開始終了日の整合性
+  - `Enrollment.MarkCompleted` / `Enrollment.Cancel` (状態遷移と不正遷移の防止)
+  - `Portfolio.UpdateGoals` (LearningGoals 更新と `UpdatedAt` 反映)
+  - `QrToken.IsExpired` / `QrToken.MarkUsed` (期限判定と二重使用防止)
+- [x] `tests/DoctorPortfolioSite.Tests/Domain/` に単体テストを追加 (29 件)
+- [x] タスクファイルの status を `done` に更新する commit を含める
+
+### 追加メモ
+
+- 重複していた `string.IsNullOrWhiteSpace` / `<= 0` 検証は `Domain/Guard.cs` (internal static) に抽出。`CallerArgumentExpression` で `paramName` を自動取得し、エラーメッセージから引数名を引けるようにした。
 
 ## テスト戦略
 
@@ -39,9 +47,9 @@ PHP 元リポジトリ `database/` および `src/` のモデル相当部分を�
 
 ## 受入基準
 
-- [ ] `dotnet test` で新規テストが全てグリーン
-- [ ] モデルクラスが EF Core / Identity への直接参照を持たない (pure C#)
-- [ ] 各モデルに状態遷移 or 不変条件を表すメソッドが最低1本存在する
+- [x] `dotnet test` で新規テストが全てグリーン (29 passed)
+- [x] モデルクラスが EF Core / Identity への直接参照を持たない (pure C#)
+- [x] 各モデルに状態遷移 or 不変条件を表すメソッドが最低1本存在する
 
 ## 想定 commit 列
 
