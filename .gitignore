@@ -1,0 +1,85 @@
+# =========================
+# .NET / build artifacts
+# =========================
+bin/
+obj/
+out/
+[Dd]ebug/
+[Rr]elease/
+x64/
+x86/
+[Bb]uild[Ll]og.*
+*.binlog
+
+# NuGet
+*.nupkg
+*.snupkg
+.nuget/
+packages/
+!packages/build/
+project.lock.json
+project.fragment.lock.json
+artifacts/
+
+# EF Core scaffolding cache
+*.DesignTimeBuild*
+
+# =========================
+# Test results / coverage
+# =========================
+[Tt]est[Rr]esult*/
+[Bb]uild[Ll]og.*
+*.trx
+*.coverage
+*.coveragexml
+coverage*.json
+coverage*.xml
+coverage*.info
+.coverage*
+htmlcov/
+
+# =========================
+# IDEs / editors
+# =========================
+.vs/
+*.user
+*.userprefs
+*.suo
+*.userosscache
+*.sln.docstates
+*.pidb
+*.svclog
+*.scc
+.idea/
+*.sw?
+
+# Keep shared VS Code config but ignore user-local
+# (launch.json / tasks.json are intentionally committed)
+.vscode/*.local.json
+
+# =========================
+# OS noise
+# =========================
+.DS_Store
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+
+# =========================
+# Secrets / local overrides
+# =========================
+*.env
+.env.*
+appsettings.*.local.json
+secrets.json
+*.pfx
+*.pem
+*.key
+
+# =========================
+# Logs / temp
+# =========================
+*.log
+logs/
+*.tmp
+*.swp
