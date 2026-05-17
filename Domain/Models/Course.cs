@@ -27,12 +27,9 @@ public class Course
         string qrCodeSecret,
         DateTimeOffset? now = null)
     {
-        if (string.IsNullOrWhiteSpace(title))
-            throw new ArgumentException("title must not be empty.", nameof(title));
-        if (credits <= 0)
-            throw new ArgumentOutOfRangeException(nameof(credits), "credits must be positive.");
-        if (maxParticipants <= 0)
-            throw new ArgumentOutOfRangeException(nameof(maxParticipants), "maxParticipants must be positive.");
+        Guard.AgainstBlank(title);
+        Guard.AgainstNonPositive(credits);
+        Guard.AgainstNonPositive(maxParticipants);
         if (endDate < startDate)
             throw new ArgumentException("endDate must not be earlier than startDate.", nameof(endDate));
 

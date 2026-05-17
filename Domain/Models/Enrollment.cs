@@ -14,10 +14,8 @@ public class Enrollment
 
     public static Enrollment Create(string userId, int courseId, DateTimeOffset enrolledAt)
     {
-        if (string.IsNullOrWhiteSpace(userId))
-            throw new ArgumentException("userId must not be empty.", nameof(userId));
-        if (courseId <= 0)
-            throw new ArgumentOutOfRangeException(nameof(courseId), "courseId must be positive.");
+        Guard.AgainstBlank(userId);
+        Guard.AgainstNonPositive(courseId);
 
         return new Enrollment
         {

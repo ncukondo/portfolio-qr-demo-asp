@@ -19,10 +19,8 @@ public class Portfolio
         string learningGoals,
         DateTimeOffset? now = null)
     {
-        if (string.IsNullOrWhiteSpace(userId))
-            throw new ArgumentException("userId must not be empty.", nameof(userId));
-        if (string.IsNullOrWhiteSpace(title))
-            throw new ArgumentException("title must not be empty.", nameof(title));
+        Guard.AgainstBlank(userId);
+        Guard.AgainstBlank(title);
 
         var stamp = now ?? DateTimeOffset.UtcNow;
         return new Portfolio
