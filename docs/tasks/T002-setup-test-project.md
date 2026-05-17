@@ -2,7 +2,7 @@
 id: T002
 title: テストプロジェクト作成
 phase: 1
-status: todo
+status: done
 depends_on: [T001]
 spec_refs: []
 layer: infra
@@ -18,19 +18,23 @@ xUnit ベースのテストプロジェクト `DoctorPortfolioSite.Tests` を作
 
 ## 作業内容
 
-- [ ] ソリューションファイル `DoctorPortfolioSite.sln` を作成し、本体プロジェクトを追加
-- [ ] `tests/DoctorPortfolioSite.Tests/` に xUnit プロジェクトを作成
-  - `xunit`
-  - `xunit.runner.visualstudio`
-  - `Microsoft.NET.Test.Sdk`
-  - `Microsoft.AspNetCore.Mvc.Testing` (WebApplicationFactory)
-  - `Microsoft.EntityFrameworkCore.InMemory` (Service層のテスト用)
-  - `FluentAssertions` (任意。アサーション可読性のため)
-- [ ] テストプロジェクトから本体プロジェクトへの参照を追加
-- [ ] サンプル smoke test `SmokeTests.cs` を1本書き、`WebApplicationFactory<Program>` で `/` が 200 を返すことを確認
-- [ ] `Program.cs` を `partial class` 化 (テストから参照可能にする)
-- [ ] `dotnet test` が成功することを確認
-- [ ] タスクファイルの status を `done` に更新する commit を含める
+- [x] ソリューションファイル `DoctorPortfolioSite.sln` を作成し、本体プロジェクトを追加
+- [x] `tests/DoctorPortfolioSite.Tests/` に xUnit プロジェクトを作成
+  - `xunit` 2.5.3 (テンプレート既定)
+  - `xunit.runner.visualstudio` 2.5.3
+  - `Microsoft.NET.Test.Sdk` 17.8.0
+  - `Microsoft.AspNetCore.Mvc.Testing` 8.0.27 (WebApplicationFactory)
+  - `Microsoft.EntityFrameworkCore.InMemory` 8.0.27 (Service層のテスト用)
+  - `FluentAssertions` 6.12.2 (MIT 最終バージョンを採用。7.x 以降はライセンス変更のため見送り)
+- [x] テストプロジェクトから本体プロジェクトへの参照を追加
+- [x] サンプル smoke test `SmokeTests.cs` を1本書き、`WebApplicationFactory<Program>` で `/` が 200 を返すことを確認
+- [x] `Program.cs` を `partial class` 化 (テストから参照可能にする)
+- [x] `dotnet test` が成功することを確認
+- [x] タスクファイルの status を `done` に更新する commit を含める
+
+### 追加メモ
+
+- 本体 `DoctorPortfolioSite.csproj` (Microsoft.NET.Sdk.Web) がリポジトリ直下にあるため、デフォルトの compile glob が `tests/**/*.cs` まで拾ってしまい、`SmokeTests.cs` を本体側でもコンパイルしようとしてビルドエラーになった。対処として本体 csproj に `<DefaultItemExcludes>$(DefaultItemExcludes);tests/**</DefaultItemExcludes>` を追加。
 
 ## テスト戦略
 
@@ -41,8 +45,8 @@ xUnit ベースのテストプロジェクト `DoctorPortfolioSite.Tests` を作
 
 ## 受入基準
 
-- [ ] `dotnet test` でテストが1件以上実行され全てグリーン
-- [ ] CI なしの段階でもローカルで再現可能
+- [x] `dotnet test` でテストが1件以上実行され全てグリーン (1 passed)
+- [x] CI なしの段階でもローカルで再現可能
 
 ## 想定 commit 列
 
