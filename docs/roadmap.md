@@ -33,20 +33,36 @@
 | T007 | [ロール (Admin/Organizer/Participant) seeding](tasks/T007-seed-roles.md) | done | T006 | - | - |
 | T008 | [ログイン/ログアウト Page](tasks/T008-login-logout-pages.md) | done | T007 | - | - |
 
-## Phase 2: 基本機能開発
+## Phase 2: ドメイン整合 + 基本機能
 
-PHP元コードの読み込み後に詳細タスクを切る。現時点では以下の粒度を想定:
+PHP 元コード (`ncukondo/portfolio-qr-demo`) のスキーマと機能をベースに移植する。元PHP には Portfolio 機能と QrToken テーブルが無く、Credit (多対多) と stateless JWT 完了URL が中心。Phase 1 で先に作った Course/Enrollment/QrToken は PHP の実体から乖離しているため、まず T009 でドメインを整合させてから機能を積む。
 
-- ユーザー管理 (CRUD / プロフィール編集)
-- コース管理 (CRUD / 検索 / 一覧)
-- 受講管理 (申込 / 履歴)
-- QRコード生成・検証・スキャン
+ロール名は SPECIFICATIONS.md に従い ASP.NET 流 (Admin/Organizer/Participant) を保持。PHP の `administrator` ⇔ Admin、`class-owner` ⇔ Organizer、`learner` ⇔ Participant とマッピング。
+
+| ID | タイトル | Status | Depends | PR | Merged |
+|---|---|---|---|---|---|
+| T009 | [ドメイン整合: Credit/ClassCredit 追加・Course 列再設計・Completion 簡略化・QrToken 廃止](tasks/T009-realign-domain-with-php.md) | todo | T008 | - | - |
+| T010 | [Credits / Courses / Sample users の seed 移植](tasks/T010-seed-credits-courses-users.md) | todo | T009 | - | - |
+| T011 | [CourseService (CRUD + 一覧 + クレジット関連付け)](tasks/T011-course-service.md) | todo | T009 | - | - |
+| T012 | [Courses 一覧 Page (`/Courses`)](tasks/T012-courses-index-page.md) | todo | T011 | - | - |
+| T013 | [Course 登録 Page (`/Courses/Create`, Organizer 権限)](tasks/T013-course-create-page.md) | todo | T011 | - | - |
+| T014 | [CSV テンプレダウンロード (`/Courses/CsvTemplate`)](tasks/T014-csv-template-download.md) | todo | T013 | - | - |
+| T015 | [CSV 一括インポート Page (`/Courses/Import`)](tasks/T015-csv-bulk-import.md) | todo | T013, T014 | - | - |
+| T016 | [ClassCompletionToken サービス (JWT, stateless)](tasks/T016-completion-token-service.md) | todo | T009 | - | - |
+| T017 | [完了URL+QR 生成 Page (複数クラス対応)](tasks/T017-generate-completion-url-page.md) | todo | T016, T011 | - | - |
+| T018 | [単一クラス QR Page (`/Courses/{id}/QrCode`)](tasks/T018-single-course-qr-page.md) | todo | T016, T011 | - | - |
+| T019 | [クラス完了処理 Page (`/Complete?token=...`, Participant 権限)](tasks/T019-complete-classes-page.md) | todo | T016, T009 | - | - |
+| T020 | [自分の受講履歴 Page (`/MyCompletions`)](tasks/T020-my-completions-page.md) | todo | T019 | - | - |
+| T021 | [トップページとナビゲーションのロール別整理](tasks/T021-dashboard-and-nav.md) | todo | T012, T020 | - | - |
 
 ## Phase 3: 応用機能開発
 
-- ポートフォリオ機能 (学習履歴 / 目標管理 / 学習記録)
+SPECIFICATIONS.md には記載されているが PHP 元実装に無い機能群。Phase 2 完了後に着手判断。
+
+- ポートフォリオ機能 (学習履歴 / 目標管理 / 学習記録) — `Portfolio` エンティティを復活させて実装
 - レポート機能 (受講統計 / CSV/Excel エクスポート)
-- UI/UX 改善
+- ユーザー管理 (管理者用 CRUD / プロフィール編集)
+- UI/UX 改善 (Bootstrap 5 整備)
 
 ## Phase 4: テスト・リリース
 
