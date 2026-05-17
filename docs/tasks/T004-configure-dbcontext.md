@@ -2,7 +2,7 @@
 id: T004
 title: ApplicationDbContext 構成
 phase: 1
-status: todo
+status: done
 depends_on: [T003]
 spec_refs: ["4.1", "5.1"]
 layer: repository
@@ -18,13 +18,21 @@ T003 で作ったモデルは pure C# のため、永続化境界をここで明
 
 ## 作業内容
 
-- [ ] `Data/ApplicationDbContext.cs` を追加 (`DbContext` 継承)
-- [ ] `DbSet<Course>` / `DbSet<Enrollment>` / `DbSet<Portfolio>` / `DbSet<QrToken>` を公開
-- [ ] `OnModelCreating` でリレーション・必須項目・ユニークインデックス (例: `QrToken.Token`) を設定
-- [ ] `Program.cs` に `AddDbContext<ApplicationDbContext>` を登録 (一旦 InMemory provider でOK、接続文字列切替は T005)
-- [ ] テスト: InMemory provider で各 `DbSet` の add/save/query が動くことを確認
-- [ ] テスト: `QrToken.Token` のユニーク制約違反が `DbUpdateException` を発生させること (Sqlite テストプロバイダ or 後続 T005 で確認するなら本タスクではスキップ可)
-- [ ] タスクファイルの status を `done` に更新する commit を含める
+- [x] `Data/ApplicationDbContext.cs` を追加 (`DbContext` 継承)
+- [x] `DbSet<Course>` / `DbSet<Enrollment>` / `DbSet<Portfolio>` / `DbSet<QrToken>` を公開
+- [x] リレーション・必須項目・ユニークインデックスを設定
+  - `QrToken.Token` ユニーク / `Enrollment(UserId, CourseId)` 複合ユニーク
+  - `Enrollment` → `Course` FK (Restrict)、`QrToken` → `Course` FK (Cascade)
+  - 文字列カラムに MaxLength を付与 (Title 200 / Description 2000 など)
+- [x] `Program.cs` に `AddDbContext<ApplicationDbContext>` を登録 (InMemory provider、接続文字列切替は T005 で対応)
+- [x] テスト: InMemory provider で各 `DbSet` の add/save/query が動くこと
+- [-] テスト: `QrToken.Token` ユニーク制約違反 → **本タスクではスキップ** (InMemory provider は unique index を強制しないため。T005 で Sqlite/Postgres プロバイダ導入時に追加予定)
+- [x] タスクファイルの status を `done` に更新する commit を含める
+
+### 追加メモ
+
+- `Microsoft.EntityFrameworkCore.InMemory` 8.0.27 を本体プロジェクトの runtime 依存として追加。T005 で Npgsql に切り替えた後に再評価する。
+- `OnModelCreating` は `ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly())` に置き換え、各エンティティ設定を `Data/Configurations/*Configuration.cs` (`IEntityTypeConfiguration<T>`) に分離 (内部クラス)。
 
 ## テスト戦略
 
@@ -39,9 +47,9 @@ T003 で作ったモデルは pure C# のため、永続化境界をここで明
 
 ## 受入基準
 
-- [ ] `dotnet test` で新規テストが全てグリーン
-- [ ] `Program.cs` でアプリ起動時に DI コンテナが `ApplicationDbContext` を解決できる (smoke test がグリーン)
-- [ ] Entity Configuration が `Data/Configurations/` に分離されている (リファクタ後)
+- [x] `dotnet test` で新規テストが全てグリーン (34 passed: T003 までの 29 + T004 の 5)
+- [x] `Program.cs` でアプリ起動時に DI コンテナが `ApplicationDbContext` を解決できる (smoke test がグリーン)
+- [x] Entity Configuration が `Data/Configurations/` に分離されている (リファクタ後)
 
 ## 想定 commit 列
 
