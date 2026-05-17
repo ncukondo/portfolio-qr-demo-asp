@@ -12,5 +12,6 @@ internal sealed class PortfolioConfiguration : IEntityTypeConfiguration<Portfoli
         builder.Property(p => p.Title).IsRequired().HasMaxLength(200);
         builder.Property(p => p.Description).HasMaxLength(2000);
         builder.Property(p => p.LearningGoals).HasMaxLength(4000);
+        builder.HasOne<ApplicationUser>().WithMany().HasForeignKey(p => p.UserId).OnDelete(DeleteBehavior.Restrict);
     }
 }
