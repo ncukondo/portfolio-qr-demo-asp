@@ -30,7 +30,7 @@
 | T004 | [ApplicationDbContext 構成](tasks/T004-configure-dbcontext.md) | done | T003 | - | - |
 | T005 | [PostgreSQL 接続と初回 migration](tasks/T005-postgresql-connection-and-migration.md) | done | T004 | - | - |
 | T006 | [ASP.NET Core Identity セットアップ](tasks/T006-setup-identity.md) | done | T005 | - | - |
-| T007 | [ロール (Admin/Organizer/Participant) seeding](tasks/T007-seed-roles.md) | todo | T006 | - | - |
+| T007 | [ロール (Admin/Organizer/Participant) seeding](tasks/T007-seed-roles.md) | done | T006 | - | - |
 | T008 | [ログイン/ログアウト Page](tasks/T008-login-logout-pages.md) | todo | T007 | - | - |
 
 ## Phase 2: 基本機能開発
