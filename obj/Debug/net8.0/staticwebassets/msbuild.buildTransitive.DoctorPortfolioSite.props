@@ -1,3 +1,0 @@
-﻿<Project>
-  <Import Project="../buildMultiTargeting/DoctorPortfolioSite.props" />
-</Project>
