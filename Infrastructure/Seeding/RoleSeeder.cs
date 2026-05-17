@@ -17,6 +17,11 @@ public class RoleSeeder
     {
         foreach (var role in DefaultRoles)
         {
+            if (await _roleManager.RoleExistsAsync(role))
+            {
+                continue;
+            }
+
             var result = await _roleManager.CreateAsync(new IdentityRole(role));
             if (!result.Succeeded)
             {
