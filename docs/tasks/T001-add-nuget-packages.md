@@ -2,7 +2,7 @@
 id: T001
 title: NuGet パッケージ追加
 phase: 1
-status: todo
+status: done
 depends_on: []
 spec_refs: ["4.1"]
 layer: infra
@@ -18,16 +18,16 @@ EF Core / PostgreSQL / Identity / QRCoder など、後続タスクが依存す�
 
 ## 作業内容
 
-- [ ] `Microsoft.EntityFrameworkCore` 関連を追加
-  - `Microsoft.EntityFrameworkCore`
-  - `Microsoft.EntityFrameworkCore.Design`
-  - `Npgsql.EntityFrameworkCore.PostgreSQL`
-- [ ] `Microsoft.AspNetCore.Identity.EntityFrameworkCore` を追加
-- [ ] `Microsoft.AspNetCore.Identity.UI` を追加 (Razor Pages 用)
-- [ ] `QRCoder` を追加
-- [ ] `dotnet restore` が成功することを確認
-- [ ] `dotnet build` が成功することを確認
-- [ ] タスクファイルの status を `done` に更新する commit を含める
+- [x] `Microsoft.EntityFrameworkCore` 関連を追加
+  - `Microsoft.EntityFrameworkCore` 8.0.27
+  - `Microsoft.EntityFrameworkCore.Design` 8.0.27
+  - `Npgsql.EntityFrameworkCore.PostgreSQL` 8.0.11
+- [x] `Microsoft.AspNetCore.Identity.EntityFrameworkCore` 8.0.27 を追加
+- [x] `Microsoft.AspNetCore.Identity.UI` 8.0.27 を追加 (Razor Pages 用)
+- [x] `QRCoder` 1.8.0 を追加
+- [x] `dotnet restore` が成功することを確認
+- [x] `dotnet build` が成功することを確認 (0 Warning / 0 Error)
+- [x] タスクファイルの status を `done` に更新する commit を含める
 
 ## テスト戦略
 
@@ -36,9 +36,9 @@ EF Core / PostgreSQL / Identity / QRCoder など、後続タスクが依存す�
 
 ## 受入基準
 
-- [ ] `dotnet restore` が成功する
-- [ ] `dotnet build` が成功する
-- [ ] `dotnet list package` で上記パッケージが列挙される
+- [x] `dotnet restore` が成功する
+- [x] `dotnet build` が成功する
+- [x] `dotnet list package` で上記パッケージが列挙される
 
 ## 想定 commit 列
 
