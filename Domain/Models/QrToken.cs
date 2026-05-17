@@ -32,6 +32,8 @@ public class QrToken
         };
     }
 
+    public bool IsExpired(DateTimeOffset moment) => ExpiresAt <= moment;
+
     public void MarkUsed()
     {
         if (IsUsed)
