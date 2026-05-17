@@ -28,7 +28,7 @@
 | T002 | [テストプロジェクト作成](tasks/T002-setup-test-project.md) | done | T001 | - | - |
 | T003 | [ドメインモデル定義 (Course/Enrollment/Portfolio/QRCode)](tasks/T003-define-domain-models.md) | done | T001 | - | - |
 | T004 | [ApplicationDbContext 構成](tasks/T004-configure-dbcontext.md) | done | T003 | - | - |
-| T005 | [PostgreSQL 接続と初回 migration](tasks/T005-postgresql-connection-and-migration.md) | todo | T004 | - | - |
+| T005 | [PostgreSQL 接続と初回 migration](tasks/T005-postgresql-connection-and-migration.md) | done | T004 | - | - |
 | T006 | [ASP.NET Core Identity セットアップ](tasks/T006-setup-identity.md) | todo | T005 | - | - |
 | T007 | [ロール (Admin/Organizer/Participant) seeding](tasks/T007-seed-roles.md) | todo | T006 | - | - |
 | T008 | [ログイン/ログアウト Page](tasks/T008-login-logout-pages.md) | todo | T007 | - | - |

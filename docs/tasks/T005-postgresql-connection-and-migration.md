@@ -2,7 +2,7 @@
 id: T005
 title: PostgreSQL 接続と初回 migration
 phase: 1
-status: todo
+status: done
 depends_on: [T004]
 spec_refs: ["4.1"]
 layer: infra
@@ -18,13 +18,21 @@ devcontainer の compose は `postgres:15` を `portfoliodb` / `portfoliouser` /
 
 ## 作業内容
 
-- [ ] `appsettings.Development.json` に `ConnectionStrings:DefaultConnection` を追加 (`Host=postgres;Database=portfoliodb;Username=portfoliouser;Password=portfoliopass`)
-- [ ] `Program.cs` で `UseNpgsql(Configuration.GetConnectionString("DefaultConnection"))` に切替
-- [ ] `dotnet ef migrations add InitialCreate` を実行し `Data/Migrations/*` を生成
-- [ ] `dotnet ef database update` で実際にスキーマが作られることを確認
-- [ ] アプリ起動時に開発環境のみ `db.Database.Migrate()` を呼ぶか判断し、ドキュメント化する
-- [ ] 統合テスト: Testcontainers.PostgreSql で実 PostgreSQL に接続し、CRUD が動くテストを1本追加 (重い場合は `[Trait("Category", "integration")]` で分離)
-- [ ] タスクファイルの status を `done` に更新する commit を含める
+- [x] `appsettings.Development.json` に `ConnectionStrings:DefaultConnection` を追加
+- [x] `Program.cs` で `UseNpgsql(Configuration.GetConnectionString("DefaultConnection"))` に切替
+- [x] `dotnet ef migrations add InitialCreate` を実行し `Data/Migrations/*` を生成
+- [x] `dotnet ef database update` で実際にスキーマ作成を確認
+- [x] アプリ起動時 (`IsDevelopment()` かつ `Database.IsRelational()` 時) のみ `db.Database.Migrate()` を実行
+- [x] 統合テスト: 実 PostgreSQL に接続して CRUD と `QrToken.Token` ユニーク制約違反 (`DbUpdateException`) を確認、`[Trait("Category", "integration")]` で分離
+- [x] タスクファイルの status を `done` に更新する commit を含める
+
+### 追加メモ
+
+- **Testcontainers 不採用**: devcontainer に Docker-in-Docker が無いため `Testcontainers.PostgreSql` を導入できなかった。代わりに devcontainer compose の `postgres` サービスへ直接接続する形で integration test を実装。CI 環境で Docker が利用可能になった時点で Testcontainers 化すべき (`PostgresIntegrationTests.cs` 冒頭の TODO コメント参照)。
+- `dotnet-ef` 8.0.27 をグローバルツールとして install (ローカル環境のみ。`.dotnet/tools` を PATH に追加する必要あり)。
+- T004 でスキップしていた `QrToken.Token` ユニーク制約違反 → `DbUpdateException` の検証は本タスクの integration test で対応済み。
+- 接続先は環境変数 `POSTGRES_TEST_CONNECTION` でも上書き可能。CI で別 DB を指したい場合に利用。
+- 本番用接続文字列はユーザシークレット / 環境変数 (`ConnectionStrings__DefaultConnection`) で注入する想定。本タスクでは導入なし。
 
 ## テスト戦略
 
@@ -39,9 +47,9 @@ devcontainer の compose は `postgres:15` を `portfoliodb` / `portfoliouser` /
 
 ## 受入基準
 
-- [ ] `dotnet ef database update` がエラーなく完了する
-- [ ] devcontainer 内で `dotnet run` してアプリが正常起動する
-- [ ] Testcontainers ベースの統合テストがグリーン
+- [x] `dotnet ef database update` がエラーなく完了
+- [x] devcontainer 内で `dotnet run` してアプリが正常起動 (Migrate() が成功し、smoke test も実 Postgres 経由でグリーン)
+- [-] Testcontainers ベースの統合テストがグリーン → **代替**: 実 PostgreSQL に対する integration test (Trait 分離) がグリーン (36 passed)
 
 ## 想定 commit 列
 
