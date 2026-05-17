@@ -10,6 +10,7 @@ internal sealed class EnrollmentConfiguration : IEntityTypeConfiguration<Enrollm
     {
         builder.Property(e => e.UserId).IsRequired().HasMaxLength(450);
         builder.HasOne<Course>().WithMany().HasForeignKey(e => e.CourseId).OnDelete(DeleteBehavior.Restrict);
+        builder.HasOne<ApplicationUser>().WithMany().HasForeignKey(e => e.UserId).OnDelete(DeleteBehavior.Restrict);
         builder.HasIndex(e => new { e.UserId, e.CourseId }).IsUnique();
     }
 }
