@@ -1,0 +1,9 @@
+@page
+@using Microsoft.AspNetCore.Authorization
+@attribute [Authorize]
+@{
+    ViewData["Title"] = "Protected Sample";
+}
+
+<h1>Protected Sample</h1>
+<p>Hello, @User.Identity?.Name. You can see this because you are authenticated.</p>
