@@ -24,7 +24,7 @@
 | ID | タイトル | Status | Depends | PR | Merged |
 |---|---|---|---|---|---|
 | T000 | [.gitignore 追加と build artifact untrack](tasks/T000-add-gitignore.md) | done | - | - | - |
-| T001 | [NuGet パッケージ追加](tasks/T001-add-nuget-packages.md) | todo | T000 | - | - |
+| T001 | [NuGet パッケージ追加](tasks/T001-add-nuget-packages.md) | done | T000 | - | - |
 | T002 | [テストプロジェクト作成](tasks/T002-setup-test-project.md) | todo | T001 | - | - |
 | T003 | [ドメインモデル定義 (Course/Enrollment/Portfolio/QRCode)](tasks/T003-define-domain-models.md) | todo | T001 | - | - |
 | T004 | [ApplicationDbContext 構成](tasks/T004-configure-dbcontext.md) | todo | T003 | - | - |
