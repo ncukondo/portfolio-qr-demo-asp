@@ -2,7 +2,7 @@
 id: T010
 title: Credits / Courses / Sample users の seed 移植
 phase: 2
-status: todo
+status: done
 depends_on: [T009]
 spec_refs: ["5.1"]
 layer: infra
