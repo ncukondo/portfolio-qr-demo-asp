@@ -2,7 +2,7 @@
 id: T020
 title: 自分の受講履歴 Page (`/MyCompletions`)
 phase: 2
-status: in_progress
+status: done
 depends_on: [T019]
 spec_refs: ["2.3", "6.3"]
 layer: page
