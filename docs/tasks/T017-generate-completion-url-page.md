@@ -2,7 +2,7 @@
 id: T017
 title: 完了URL+QR 生成 Page (複数クラス対応)
 phase: 2
-status: todo
+status: done
 depends_on: [T016, T011]
 spec_refs: ["2.2", "7.3"]
 layer: page
