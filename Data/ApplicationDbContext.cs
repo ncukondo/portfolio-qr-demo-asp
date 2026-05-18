@@ -13,7 +13,6 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
     }
 
     public DbSet<Course> Courses => Set<Course>();
-    public DbSet<Enrollment> Enrollments => Set<Enrollment>();
     public DbSet<Portfolio> Portfolios => Set<Portfolio>();
     public DbSet<QrToken> QrTokens => Set<QrToken>();
 
