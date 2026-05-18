@@ -1,0 +1,20 @@
+@using DoctorPortfolioSite.Infrastructure.Seeding
+@using Microsoft.Extensions.Options
+@inject IOptions<SeedingOptions> SeedingOptions
+
+@{
+    var password = SeedingOptions.Value.SampleUserPassword;
+}
+
+<div class="alert alert-info mt-4" role="alert">
+    <strong>開発用デモアカウント</strong> (Development 環境のみ表示)
+    <br />
+    <small>パスワードは全アカウント共通: <code>@password</code></small>
+    <ul class="mb-0 mt-2 small">
+        <li><code>admin@example.com</code> — Admin</li>
+        <li><code>owner@example.com</code> — Organizer</li>
+        <li><code>learner1@example.com</code> — Participant</li>
+        <li><code>learner2@example.com</code> — Participant</li>
+        <li><code>multi@example.com</code> — Organizer + Participant</li>
+    </ul>
+</div>

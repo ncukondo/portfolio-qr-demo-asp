@@ -1,4 +1,5 @@
-﻿<!DOCTYPE html>
+﻿@inject Microsoft.AspNetCore.Hosting.IWebHostEnvironment WebHostEnvironment
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
@@ -37,6 +38,15 @@
     <div class="container">
         <main role="main" class="pb-3">
             @RenderBody()
+
+            @{
+                var loginPath = Context.Request.Path.Value ?? string.Empty;
+                var isLoginPath = loginPath.Contains("/Account/Login", StringComparison.OrdinalIgnoreCase);
+            }
+            @if (WebHostEnvironment.IsDevelopment() && isLoginPath)
+            {
+                <partial name="_DemoAccounts" />
+            }
         </main>
     </div>
 
