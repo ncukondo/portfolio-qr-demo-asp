@@ -38,6 +38,7 @@ builder.Services.AddScoped<SampleUserSeeder>();
 builder.Services.AddScoped<SampleCourseSeeder>();
 
 builder.Services.AddScoped<ICourseService, CourseService>();
+builder.Services.AddScoped<DoctorPortfolioSite.Application.Credits.ICreditService, DoctorPortfolioSite.Application.Credits.CreditService>();
 
 var app = builder.Build();
 

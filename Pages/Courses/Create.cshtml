@@ -1,0 +1,87 @@
+@page
+@model DoctorPortfolioSite.Pages.Courses.CreateModel
+@{
+    ViewData["Title"] = "クラス登録";
+}
+
+<h1 class="h2 mb-4">クラス登録</h1>
+
+<form method="post" novalidate>
+    <div asp-validation-summary="ModelOnly" class="alert alert-danger" role="alert"></div>
+
+    <div class="mb-3">
+        <label asp-for="Input.ClassName" class="form-label">クラス名</label>
+        <input asp-for="Input.ClassName" class="form-control" />
+        <span asp-validation-for="Input.ClassName" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="Input.Description" class="form-label">説明</label>
+        <textarea asp-for="Input.Description" class="form-control" rows="3"></textarea>
+        <span asp-validation-for="Input.Description" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="Input.Organizer" class="form-label">開催団体</label>
+        <input asp-for="Input.Organizer" class="form-control" />
+        <span asp-validation-for="Input.Organizer" class="text-danger"></span>
+    </div>
+
+    <div class="row">
+        <div class="col-md-4 mb-3">
+            <label asp-for="Input.EventDate" class="form-label">開催日</label>
+            <input asp-for="Input.EventDate" type="date" class="form-control" />
+            <span asp-validation-for="Input.EventDate" class="text-danger"></span>
+        </div>
+        <div class="col-md-4 mb-3">
+            <label asp-for="Input.EventTime" class="form-label">開催時刻 (UTC)</label>
+            <input asp-for="Input.EventTime" type="time" class="form-control" />
+            <span asp-validation-for="Input.EventTime" class="text-danger"></span>
+        </div>
+        <div class="col-md-4 mb-3">
+            <label asp-for="Input.DurationMinutes" class="form-label">時間(分)</label>
+            <input asp-for="Input.DurationMinutes" type="number" min="1" class="form-control" />
+            <span asp-validation-for="Input.DurationMinutes" class="text-danger"></span>
+        </div>
+    </div>
+
+    <fieldset class="mb-3">
+        <legend class="form-label">単位</legend>
+        @if (Model.CreditOptions.Count == 0)
+        {
+            <p class="text-muted small mb-0">単位マスタが未登録です。</p>
+        }
+        else
+        {
+            <div class="row">
+                @foreach (var option in Model.CreditOptions)
+                {
+                    var checkboxId = $"credit-{option.Code}";
+                    var amountId = $"amount-{option.Code}";
+                    var checkedAttr = (Model.Input.CreditCodes ?? Array.Empty<string>()).Contains(option.Code);
+                    var defaultAmount = Model.Input.CreditAmounts.TryGetValue(option.Code, out var a) ? a : 1.0m;
+                    <div class="col-md-6 mb-2">
+                        <div class="form-check d-flex align-items-center">
+                            <input class="form-check-input me-2" type="checkbox"
+                                   name="Input.CreditCodes" value="@option.Code" id="@checkboxId"
+                                   @(checkedAttr ? "checked" : "") />
+                            <label class="form-check-label me-3" for="@checkboxId">
+                                <strong>@option.Code</strong> @option.Label
+                                <span class="text-muted small">(@option.Category)</span>
+                            </label>
+                            <input class="form-control form-control-sm ms-auto" style="width: 6rem;"
+                                   type="number" step="0.1" min="0.1"
+                                   name="Input.CreditAmounts[@option.Code]" id="@amountId"
+                                   value="@defaultAmount.ToString("0.0")" />
+                        </div>
+                    </div>
+                }
+            </div>
+        }
+    </fieldset>
+
+    <div class="d-flex gap-2">
+        <button type="submit" class="btn btn-primary">登録</button>
+        <a class="btn btn-link" asp-page="./Index">キャンセル</a>
+    </div>
+</form>
