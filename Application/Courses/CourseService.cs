@@ -43,8 +43,31 @@ public class CourseService : ICourseService
         return course.Id;
     }
 
-    public Task<CourseDetailsDto?> GetByIdAsync(int id, CancellationToken cancellationToken = default)
-        => throw new NotImplementedException();
+    public async Task<CourseDetailsDto?> GetByIdAsync(int id, CancellationToken cancellationToken = default)
+    {
+        var course = await _db.Courses.AsNoTracking().FirstOrDefaultAsync(c => c.Id == id, cancellationToken);
+        if (course is null)
+            return null;
+
+        var credits = await (
+            from cc in _db.ClassCredits.AsNoTracking()
+            join c in _db.Credits.AsNoTracking() on cc.CreditId equals c.Id
+            where cc.CourseId == id
+            orderby c.Code
+            select new CourseCreditDto(c.Code, c.Label, cc.Amount)
+        ).ToListAsync(cancellationToken);
+
+        return new CourseDetailsDto(
+            course.Id,
+            course.ClassName,
+            course.Description,
+            course.Organizer,
+            course.EventDateTime,
+            course.DurationMinutes,
+            course.CreatedAt,
+            course.UpdatedAt,
+            credits);
+    }
 
     public Task<IReadOnlyList<CourseDto>> ListAsync(CourseQuery query, CancellationToken cancellationToken = default)
         => throw new NotImplementedException();
