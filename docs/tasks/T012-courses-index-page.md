@@ -2,7 +2,7 @@
 id: T012
 title: Courses 一覧 Page (`/Courses`)
 phase: 2
-status: todo
+status: done
 depends_on: [T011]
 spec_refs: ["2.2", "6.2", "6.3"]
 layer: page
