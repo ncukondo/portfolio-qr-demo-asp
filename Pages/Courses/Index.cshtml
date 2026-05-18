@@ -1,0 +1,68 @@
+@page
+@model DoctorPortfolioSite.Pages.Courses.IndexModel
+@{
+    ViewData["Title"] = "クラス一覧";
+    var isOrganizer = User.IsInRole("Admin") || User.IsInRole("Organizer");
+}
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h1 class="h2 mb-0">クラス一覧</h1>
+    @if (isOrganizer)
+    {
+        <div class="btn-group" role="group" aria-label="Organizer actions">
+            <a class="btn btn-primary" asp-page="/Courses/Create">クラス登録</a>
+            <a class="btn btn-outline-primary" asp-page="/Courses/Import">CSV インポート</a>
+            <a class="btn btn-outline-secondary" asp-page="/Courses/GenerateCompletionUrl">完了URL生成</a>
+        </div>
+    }
+</div>
+
+@if (Model.Courses.Count == 0)
+{
+    <div class="alert alert-info">登録済みのクラスはありません。</div>
+}
+else
+{
+    <div class="row row-cols-1 row-cols-md-2 g-3">
+        @foreach (var item in Model.Courses)
+        {
+            <div class="col">
+                <div class="card h-100">
+                    <div class="card-body">
+                        <h2 class="card-title h5">@item.Summary.ClassName</h2>
+                        <h3 class="card-subtitle text-muted h6 mb-2">@item.Summary.Organizer</h3>
+                        @if (!string.IsNullOrWhiteSpace(item.Description))
+                        {
+                            <p class="card-text">@item.Description</p>
+                        }
+                        <dl class="row mb-2 small">
+                            <dt class="col-sm-4">開催日時</dt>
+                            <dd class="col-sm-8">@item.Summary.EventDateTime.ToString("yyyy-MM-dd HH:mm 'UTC'")</dd>
+                            <dt class="col-sm-4">時間</dt>
+                            <dd class="col-sm-8">@item.Summary.DurationMinutes 分</dd>
+                            <dt class="col-sm-4">合計単位</dt>
+                            <dd class="col-sm-8">@item.Summary.TotalCreditAmount.ToString("0.0")</dd>
+                        </dl>
+                        @if (item.Credits.Count > 0)
+                        {
+                            <ul class="list-inline mb-0">
+                                @foreach (var credit in item.Credits)
+                                {
+                                    <li class="list-inline-item">
+                                        <span class="badge bg-secondary">@credit.Code @credit.Label (@credit.Amount.ToString("0.0"))</span>
+                                    </li>
+                                }
+                            </ul>
+                        }
+                    </div>
+                    @if (isOrganizer)
+                    {
+                        <div class="card-footer bg-transparent">
+                            <a class="btn btn-sm btn-outline-secondary" asp-page="/Courses/QrCode" asp-route-id="@item.Summary.Id">QRコード生成</a>
+                        </div>
+                    }
+                </div>
+            </div>
+        }
+    </div>
+}
