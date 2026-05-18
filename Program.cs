@@ -1,3 +1,4 @@
+using DoctorPortfolioSite.Application.Courses;
 using DoctorPortfolioSite.Data;
 using DoctorPortfolioSite.Domain.Models;
 using DoctorPortfolioSite.Infrastructure.Seeding;
@@ -35,6 +36,8 @@ builder.Services.AddScoped<AdminSeeder>();
 builder.Services.AddScoped<CreditSeeder>();
 builder.Services.AddScoped<SampleUserSeeder>();
 builder.Services.AddScoped<SampleCourseSeeder>();
+
+builder.Services.AddScoped<ICourseService, CourseService>();
 
 var app = builder.Build();
 
