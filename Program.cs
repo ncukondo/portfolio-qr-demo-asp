@@ -3,6 +3,7 @@ using DoctorPortfolioSite.Domain.Models;
 using DoctorPortfolioSite.Infrastructure.Seeding;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -28,8 +29,12 @@ builder.Services.AddIdentity<ApplicationUser, IdentityRole>(options =>
     .AddDefaultUI();
 
 builder.Services.Configure<AdminSeedOptions>(builder.Configuration.GetSection(AdminSeedOptions.SectionName));
+builder.Services.Configure<SeedingOptions>(builder.Configuration.GetSection(SeedingOptions.SectionName));
 builder.Services.AddScoped<RoleSeeder>();
 builder.Services.AddScoped<AdminSeeder>();
+builder.Services.AddScoped<CreditSeeder>();
+builder.Services.AddScoped<SampleUserSeeder>();
+builder.Services.AddScoped<SampleCourseSeeder>();
 
 var app = builder.Build();
 
@@ -43,6 +48,14 @@ if (app.Environment.IsDevelopment())
     }
     await scope.ServiceProvider.GetRequiredService<RoleSeeder>().SeedAsync();
     await scope.ServiceProvider.GetRequiredService<AdminSeeder>().SeedAsync();
+    await scope.ServiceProvider.GetRequiredService<CreditSeeder>().SeedAsync();
+
+    var seedingOptions = scope.ServiceProvider.GetRequiredService<IOptions<SeedingOptions>>().Value;
+    if (seedingOptions.LoadSampleData)
+    {
+        await scope.ServiceProvider.GetRequiredService<SampleUserSeeder>().SeedAsync();
+        await scope.ServiceProvider.GetRequiredService<SampleCourseSeeder>().SeedAsync();
+    }
 }
 
 // Configure the HTTP request pipeline.
