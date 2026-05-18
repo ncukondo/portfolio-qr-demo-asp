@@ -1,0 +1,66 @@
+@page "/Complete"
+@model DoctorPortfolioSite.Pages.CompleteModel
+@{
+    ViewData["Title"] = "受講完了処理";
+}
+
+<h1 class="h2 mb-4">受講完了処理</h1>
+
+@if (Model.Status == DoctorPortfolioSite.Pages.CompleteModel.PageStatus.Invalid)
+{
+    <div class="alert alert-danger" role="alert">
+        <strong>エラー:</strong> @Model.ErrorMessage
+    </div>
+}
+else if (Model.Status == DoctorPortfolioSite.Pages.CompleteModel.PageStatus.Forbidden)
+{
+    <div class="alert alert-warning" role="alert">
+        <strong>権限エラー:</strong> @Model.ErrorMessage
+    </div>
+}
+else
+{
+    @if (Model.NewlyCompleted.Count > 0)
+    {
+        <div class="card border-success mb-3">
+            <div class="card-header bg-success text-white">新規受講完了 (@Model.NewlyCompleted.Count 件)</div>
+            <ul class="list-group list-group-flush">
+                @foreach (var row in Model.NewlyCompleted)
+                {
+                    <li class="list-group-item">@row.ClassName</li>
+                }
+            </ul>
+        </div>
+    }
+
+    @if (Model.AlreadyCompleted.Count > 0)
+    {
+        <div class="card border-info mb-3">
+            <div class="card-header bg-info text-white">既に受講済み (@Model.AlreadyCompleted.Count 件)</div>
+            <ul class="list-group list-group-flush">
+                @foreach (var row in Model.AlreadyCompleted)
+                {
+                    <li class="list-group-item">@row.ClassName</li>
+                }
+            </ul>
+        </div>
+    }
+
+    @if (Model.NotFoundRows.Count > 0)
+    {
+        <div class="card border-danger mb-3">
+            <div class="card-header bg-danger text-white">登録できなかったクラス (@Model.NotFoundRows.Count 件)</div>
+            <ul class="list-group list-group-flush">
+                @foreach (var row in Model.NotFoundRows)
+                {
+                    <li class="list-group-item">@row.ClassName</li>
+                }
+            </ul>
+        </div>
+    }
+
+    <p class="mt-3">
+        <a class="btn btn-link" asp-page="/MyCompletions">受講履歴を見る</a>
+        <a class="btn btn-link" asp-page="/Courses/Index">クラス一覧へ</a>
+    </p>
+}
