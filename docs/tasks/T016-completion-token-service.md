@@ -2,7 +2,7 @@
 id: T016
 title: ClassCompletionToken サービス (JWT, stateless)
 phase: 2
-status: todo
+status: done
 depends_on: [T009]
 spec_refs: ["2.4", "7.3", "8.1"]
 layer: service
