@@ -2,7 +2,7 @@
 id: T011
 title: CourseService (CRUD + 一覧 + クレジット関連付け)
 phase: 2
-status: todo
+status: done
 depends_on: [T009]
 spec_refs: ["7.2"]
 layer: service
