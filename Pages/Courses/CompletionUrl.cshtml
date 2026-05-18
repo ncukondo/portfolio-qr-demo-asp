@@ -1,0 +1,81 @@
+@page
+@model DoctorPortfolioSite.Pages.Courses.CompletionUrlModel
+@{
+    ViewData["Title"] = "完了URL生成";
+}
+
+<h1 class="h2 mb-4">完了URL生成</h1>
+
+<form method="post" novalidate>
+    <div asp-validation-summary="ModelOnly" class="alert alert-danger" role="alert"></div>
+
+    <fieldset class="mb-3">
+        <legend class="form-label">対象クラス (複数選択可)</legend>
+        @if (Model.Courses.Count == 0)
+        {
+            <p class="text-muted small">クラスが登録されていません。</p>
+        }
+        else
+        {
+            <div class="row">
+                @foreach (var course in Model.Courses)
+                {
+                    var inputId = $"course-{course.Id}";
+                    var preChecked = (Model.Form.SelectedClassIds ?? Array.Empty<int>()).Contains(course.Id);
+                    <div class="col-md-6 mb-2">
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox"
+                                   name="Form.SelectedClassIds" value="@course.Id" id="@inputId"
+                                   @(preChecked ? "checked" : "") />
+                            <label class="form-check-label" for="@inputId">
+                                <strong>@course.ClassName</strong>
+                                <span class="text-muted small">— @course.Organizer / @course.EventDateTime.ToString("yyyy-MM-dd HH:mm")</span>
+                            </label>
+                        </div>
+                    </div>
+                }
+            </div>
+        }
+        <span asp-validation-for="Form.SelectedClassIds" class="text-danger"></span>
+    </fieldset>
+
+    <div class="mb-3" style="max-width: 14rem;">
+        <label asp-for="Form.ExpirationHours" class="form-label">有効期限 (時間)</label>
+        <input asp-for="Form.ExpirationHours" type="number" min="1" max="8760" class="form-control" />
+        <span asp-validation-for="Form.ExpirationHours" class="text-danger"></span>
+    </div>
+
+    <button type="submit" class="btn btn-primary">URL と QR コードを生成</button>
+</form>
+
+@if (Model.Result is not null)
+{
+    <hr />
+    <h2 class="h4 mt-4">生成結果</h2>
+
+    <p class="text-muted small mb-1">
+        対象クラス:
+        @if (Model.Result.SelectedClassNames.Count <= 2)
+        {
+            @string.Join("、", Model.Result.SelectedClassNames)
+        }
+        else
+        {
+            var head = string.Join("、", Model.Result.SelectedClassNames.Take(2));
+            @($"{head} 他 {Model.Result.SelectedClassNames.Count - 2} 件")
+        }
+    </p>
+
+    <div class="mb-3">
+        <label class="form-label">完了URL</label>
+        <textarea class="form-control" rows="3" readonly>@Model.Result.Url</textarea>
+    </div>
+
+    <div class="mb-3">
+        <label class="form-label">QR コード</label>
+        <div>
+            <img src="@Model.Result.QrCodeDataUrl" alt="完了URL の QR コード" class="border" />
+        </div>
+        <a class="btn btn-sm btn-outline-secondary mt-2" href="@Model.Result.QrCodeDataUrl" download="completion-qr.png">PNG をダウンロード</a>
+    </div>
+}
