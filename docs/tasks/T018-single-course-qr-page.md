@@ -2,7 +2,7 @@
 id: T018
 title: 単一クラス QR Page (`/Courses/{id}/QrCode`)
 phase: 2
-status: todo
+status: done
 depends_on: [T016, T011]
 spec_refs: ["2.2", "7.3"]
 layer: page
