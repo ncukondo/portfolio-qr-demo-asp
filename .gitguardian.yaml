@@ -1,0 +1,15 @@
+# GitGuardian configuration — see https://docs.gitguardian.com/internal-repositories-monitoring/repositories/integrations
+# Excludes test-only credentials from scans. The values here are NOT secrets:
+# they're fixtures used by in-memory e2e tests (WebApplicationFactory) and
+# never reach Production. Centralized in TestUserCredentials.cs.
+
+version: 2
+
+secret:
+  ignored-matches:
+    - name: "Test fixture password for e2e tests"
+      match: "StrongP@ss1"
+
+  ignored-paths:
+    # Test password fixtures and e2e tests that reference them are not real secrets.
+    - "tests/DoctorPortfolioSite.Tests/E2E/TestUserCredentials.cs"
