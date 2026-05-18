@@ -2,7 +2,7 @@
 id: T021
 title: トップページとナビゲーションのロール別整理
 phase: 2
-status: todo
+status: in_progress
 depends_on: [T012, T020]
 spec_refs: ["6.1", "6.2", "6.3", "6.4"]
 layer: page
