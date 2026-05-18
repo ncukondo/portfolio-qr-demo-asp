@@ -4,6 +4,64 @@
     ViewData["Title"] = "医師生涯学習ポートフォリオサイト";
 }
 
-<div class="text-center">
-    <h1 class="display-4">医師生涯学習ポートフォリオサイト</h1>
+<div class="text-center mb-4">
+    <h1 class="display-5">医師生涯学習ポートフォリオサイト</h1>
+    <p class="lead text-muted">クラス受講記録 / QR コード完了登録</p>
 </div>
+
+@if (!Model.IsSignedIn)
+{
+    <div class="d-flex flex-column flex-md-row justify-content-center gap-2 mb-4">
+        <a class="btn btn-primary" asp-area="Identity" asp-page="/Account/Login">ログイン</a>
+        <a class="btn btn-outline-primary" asp-page="/Courses/Index">クラス一覧を見る (公開)</a>
+    </div>
+}
+else
+{
+    <div class="d-flex justify-content-end mb-3">
+        <span class="text-muted small me-2">@Model.DisplayName</span>
+        @foreach (var role in Model.Roles)
+        {
+            <span class="badge bg-secondary me-1">@role</span>
+        }
+    </div>
+
+    <div class="row g-3">
+        <div class="col-md-6">
+            <div class="card h-100">
+                <div class="card-body">
+                    <h2 class="card-title h5">クラス</h2>
+                    <p><a class="btn btn-outline-primary" asp-page="/Courses/Index">クラス一覧</a></p>
+                </div>
+            </div>
+        </div>
+
+        @if (Model.IsParticipant)
+        {
+            <div class="col-md-6">
+                <div class="card h-100">
+                    <div class="card-body">
+                        <h2 class="card-title h5">受講者向け</h2>
+                        <p><a class="btn btn-outline-secondary" asp-page="/MyCompletions">受講履歴</a></p>
+                    </div>
+                </div>
+            </div>
+        }
+
+        @if (Model.IsAdminOrOrganizer)
+        {
+            <div class="col-md-6">
+                <div class="card h-100">
+                    <div class="card-body">
+                        <h2 class="card-title h5">主催者向け</h2>
+                        <div class="d-flex flex-wrap gap-2">
+                            <a class="btn btn-outline-primary btn-sm" asp-page="/Courses/Create">クラス登録</a>
+                            <a class="btn btn-outline-primary btn-sm" asp-page="/Courses/Import">CSV インポート</a>
+                            <a class="btn btn-outline-primary btn-sm" asp-page="/Courses/CompletionUrl">完了URL生成</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+}
