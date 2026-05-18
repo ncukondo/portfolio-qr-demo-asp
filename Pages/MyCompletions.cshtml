@@ -1,0 +1,36 @@
+@page "/MyCompletions"
+@model DoctorPortfolioSite.Pages.MyCompletionsModel
+@{
+    ViewData["Title"] = "受講履歴";
+}
+
+<h1 class="h2 mb-4">受講履歴</h1>
+
+@if (Model.Completions.Count == 0)
+{
+    <p class="text-muted">まだ受講完了したクラスはありません。</p>
+}
+else
+{
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th scope="col">クラス名</th>
+                <th scope="col">開催団体</th>
+                <th scope="col">開催日時 (UTC)</th>
+                <th scope="col">受講完了日時 (UTC)</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var row in Model.Completions)
+            {
+                <tr>
+                    <td>@row.ClassName</td>
+                    <td>@row.Organizer</td>
+                    <td>@row.EventDateTime.ToString("yyyy-MM-dd HH:mm")</td>
+                    <td>@row.CompletedAt.ToString("yyyy-MM-dd HH:mm")</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}

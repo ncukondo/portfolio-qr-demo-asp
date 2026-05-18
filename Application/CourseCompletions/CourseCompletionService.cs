@@ -33,4 +33,15 @@ public class CourseCompletionService : ICourseCompletionService
         await _db.SaveChangesAsync(cancellationToken);
         return RegisterCompletionResult.Created;
     }
+
+    public async Task<IReadOnlyList<UserCompletionRow>> GetUserCompletionsAsync(string userId, CancellationToken cancellationToken = default)
+    {
+        return await (
+            from cc in _db.CourseCompletions.AsNoTracking()
+            join c in _db.Courses.AsNoTracking() on cc.CourseId equals c.Id
+            where cc.UserId == userId
+            orderby cc.CompletedAt descending
+            select new UserCompletionRow(c.Id, c.ClassName, c.Organizer, c.EventDateTime, cc.CompletedAt)
+        ).ToListAsync(cancellationToken);
+    }
 }
