@@ -43,6 +43,7 @@ builder.Services.AddScoped<DoctorPortfolioSite.Application.Credits.ICreditServic
 
 builder.Services.Configure<JwtOptions>(builder.Configuration.GetSection(JwtOptions.SectionName));
 builder.Services.AddScoped<ICompletionTokenService, ClassCompletionTokenService>();
+builder.Services.AddSingleton<DoctorPortfolioSite.Infrastructure.Qr.IQrCodeService, DoctorPortfolioSite.Infrastructure.Qr.QrCodeService>();
 
 var app = builder.Build();
 
