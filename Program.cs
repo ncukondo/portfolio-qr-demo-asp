@@ -1,4 +1,5 @@
 using DoctorPortfolioSite.Application.Courses;
+using DoctorPortfolioSite.Application.Tokens;
 using DoctorPortfolioSite.Data;
 using DoctorPortfolioSite.Domain.Models;
 using DoctorPortfolioSite.Infrastructure.Seeding;
@@ -39,6 +40,9 @@ builder.Services.AddScoped<SampleCourseSeeder>();
 
 builder.Services.AddScoped<ICourseService, CourseService>();
 builder.Services.AddScoped<DoctorPortfolioSite.Application.Credits.ICreditService, DoctorPortfolioSite.Application.Credits.CreditService>();
+
+builder.Services.Configure<JwtOptions>(builder.Configuration.GetSection(JwtOptions.SectionName));
+builder.Services.AddScoped<ICompletionTokenService, ClassCompletionTokenService>();
 
 var app = builder.Build();
 
