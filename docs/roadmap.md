@@ -52,7 +52,7 @@ PHP 元コード (`ncukondo/portfolio-qr-demo`) のスキーマと機能をベ�
 | T017 | [完了URL+QR 生成 Page (複数クラス対応)](tasks/T017-generate-completion-url-page.md) | done | T016, T011 | - | - |
 | T018 | [単一クラス QR Page (`/Courses/{id}/QrCode`)](tasks/T018-single-course-qr-page.md) | done | T016, T011 | - | - |
 | T019 | [クラス完了処理 Page (`/Complete?token=...`, Participant 権限)](tasks/T019-complete-classes-page.md) | done | T016, T009 | - | - |
-| T020 | [自分の受講履歴 Page (`/MyCompletions`)](tasks/T020-my-completions-page.md) | todo | T019 | - | - |
+| T020 | [自分の受講履歴 Page (`/MyCompletions`)](tasks/T020-my-completions-page.md) | done | T019 | - | - |
 | T021 | [トップページとナビゲーションのロール別整理](tasks/T021-dashboard-and-nav.md) | todo | T012, T020 | - | - |
 
 ## Phase 3: 応用機能開発
