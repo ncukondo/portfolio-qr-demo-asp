@@ -69,14 +69,97 @@ public class CourseService : ICourseService
             credits);
     }
 
-    public Task<IReadOnlyList<CourseDto>> ListAsync(CourseQuery query, CancellationToken cancellationToken = default)
-        => throw new NotImplementedException();
+    public async Task<IReadOnlyList<CourseDto>> ListAsync(CourseQuery query, CancellationToken cancellationToken = default)
+    {
+        ArgumentNullException.ThrowIfNull(query);
 
-    public Task<bool> UpdateAsync(int id, UpdateCourseInput input, CancellationToken cancellationToken = default)
-        => throw new NotImplementedException();
+        var courses = _db.Courses.AsNoTracking().AsQueryable();
 
-    public Task<bool> DeleteAsync(int id, CancellationToken cancellationToken = default)
-        => throw new NotImplementedException();
+        if (!string.IsNullOrWhiteSpace(query.Organizer))
+            courses = courses.Where(c => c.Organizer == query.Organizer);
+        if (query.From.HasValue)
+            courses = courses.Where(c => c.EventDateTime >= query.From.Value);
+        if (query.To.HasValue)
+            courses = courses.Where(c => c.EventDateTime <= query.To.Value);
+
+        var rows = await (
+            from c in courses
+            orderby c.EventDateTime
+            select new
+            {
+                c.Id,
+                c.ClassName,
+                c.Organizer,
+                c.EventDateTime,
+                c.DurationMinutes,
+                TotalCreditAmount = _db.ClassCredits
+                    .Where(cc => cc.CourseId == c.Id)
+                    .Sum(cc => (decimal?)cc.Amount) ?? 0m,
+            }
+        ).ToListAsync(cancellationToken);
+
+        return rows
+            .Select(r => new CourseDto(r.Id, r.ClassName, r.Organizer, r.EventDateTime, r.DurationMinutes, r.TotalCreditAmount))
+            .ToList();
+    }
+
+    public async Task<bool> UpdateAsync(int id, UpdateCourseInput input, CancellationToken cancellationToken = default)
+    {
+        ArgumentNullException.ThrowIfNull(input);
+
+        // Pre-validate by building a throwaway Course — Guard throws before we touch the DB row.
+        _ = Course.Create(input.ClassName, input.Description, input.Organizer, input.EventDateTime, input.DurationMinutes);
+
+        var course = await _db.Courses.FirstOrDefaultAsync(c => c.Id == id, cancellationToken);
+        if (course is null)
+            return false;
+
+        ApplyInputToCourse(course, input.ClassName, input.Description, input.Organizer, input.EventDateTime, input.DurationMinutes);
+
+        var existingLinks = await _db.ClassCredits.Where(cc => cc.CourseId == id).ToListAsync(cancellationToken);
+        _db.ClassCredits.RemoveRange(existingLinks);
+
+        var resolved = await ResolveCreditAssignmentsAsync(input.Credits, cancellationToken);
+        foreach (var (creditId, amount) in resolved)
+        {
+            _db.ClassCredits.Add(ClassCredit.Create(id, creditId, amount));
+        }
+
+        await _db.SaveChangesAsync(cancellationToken);
+        return true;
+    }
+
+    public async Task<bool> DeleteAsync(int id, CancellationToken cancellationToken = default)
+    {
+        var course = await _db.Courses.FirstOrDefaultAsync(c => c.Id == id, cancellationToken);
+        if (course is null)
+            return false;
+
+        var links = await _db.ClassCredits.Where(cc => cc.CourseId == id).ToListAsync(cancellationToken);
+        _db.ClassCredits.RemoveRange(links);
+        _db.Courses.Remove(course);
+        await _db.SaveChangesAsync(cancellationToken);
+        return true;
+    }
+
+    // Course exposes private setters via factory only — set fields through the EF entry
+    // so we don't have to add a mutation method on the domain entity yet (Phase 2 minimum).
+    private void ApplyInputToCourse(
+        Course course,
+        string className,
+        string description,
+        string organizer,
+        DateTimeOffset eventDateTime,
+        int durationMinutes)
+    {
+        var entry = _db.Entry(course);
+        entry.Property(nameof(Course.ClassName)).CurrentValue = className;
+        entry.Property(nameof(Course.Description)).CurrentValue = description ?? string.Empty;
+        entry.Property(nameof(Course.Organizer)).CurrentValue = organizer;
+        entry.Property(nameof(Course.EventDateTime)).CurrentValue = eventDateTime;
+        entry.Property(nameof(Course.DurationMinutes)).CurrentValue = durationMinutes;
+        entry.Property(nameof(Course.UpdatedAt)).CurrentValue = DateTimeOffset.UtcNow;
+    }
 
     // Resolves credit codes → (id, amount). Unknown codes silently dropped (PHP parity).
     // Duplicate codes are collapsed; the last assignment wins.
