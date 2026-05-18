@@ -140,7 +140,7 @@ public class CoursesCreatePageTests
         var token = await GetAntiForgeryTokenAsync(client, "/Courses/Create");
         var form = new FormUrlEncodedContent(new[]
         {
-            new KeyValuePair<string, string>("Input.ClassName", "壊れた講座"),
+            new KeyValuePair<string, string>("Input.ClassName", "Broken-Course-XYZ"),
             new KeyValuePair<string, string>("Input.Description", ""),
             new KeyValuePair<string, string>("Input.Organizer", "Org"),
             new KeyValuePair<string, string>("Input.EventDate", "2026-08-01"),
@@ -153,11 +153,11 @@ public class CoursesCreatePageTests
 
         post.StatusCode.Should().Be(HttpStatusCode.OK);
         var html = await post.Content.ReadAsStringAsync();
-        html.Should().Contain("壊れた講座"); // input value preserved
+        html.Should().Contain("Broken-Course-XYZ"); // input value preserved
 
         using var scope = factory.Services.CreateScope();
         var db = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
-        (await db.Courses.CountAsync(c => c.ClassName == "壊れた講座")).Should().Be(0);
+        (await db.Courses.CountAsync(c => c.ClassName == "Broken-Course-XYZ")).Should().Be(0);
     }
 
     private static async Task SeedCreditsAsync(TestWebApplicationFactory factory)
