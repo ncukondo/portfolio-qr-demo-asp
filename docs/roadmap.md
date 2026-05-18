@@ -48,7 +48,7 @@ PHP 元コード (`ncukondo/portfolio-qr-demo`) のスキーマと機能をベ�
 | T013 | [Course 登録 Page (`/Courses/Create`, Organizer 権限)](tasks/T013-course-create-page.md) | done | T011 | - | - |
 | T014 | [CSV テンプレダウンロード (`/Courses/CsvTemplate`)](tasks/T014-csv-template-download.md) | done | T013 | - | - |
 | T015 | [CSV 一括インポート Page (`/Courses/Import`)](tasks/T015-csv-bulk-import.md) | done | T013, T014 | - | - |
-| T016 | [ClassCompletionToken サービス (JWT, stateless)](tasks/T016-completion-token-service.md) | todo | T009 | - | - |
+| T016 | [ClassCompletionToken サービス (JWT, stateless)](tasks/T016-completion-token-service.md) | done | T009 | - | - |
 | T017 | [完了URL+QR 生成 Page (複数クラス対応)](tasks/T017-generate-completion-url-page.md) | todo | T016, T011 | - | - |
 | T018 | [単一クラス QR Page (`/Courses/{id}/QrCode`)](tasks/T018-single-course-qr-page.md) | todo | T016, T011 | - | - |
 | T019 | [クラス完了処理 Page (`/Complete?token=...`, Participant 権限)](tasks/T019-complete-classes-page.md) | todo | T016, T009 | - | - |
