@@ -1,0 +1,40 @@
+@page "/Courses/{id:int}/QrCode"
+@model DoctorPortfolioSite.Pages.Courses.QrCodeModel
+@{
+    ViewData["Title"] = $"QRコード — {Model.Course.ClassName}";
+}
+
+<h1 class="h2 mb-1">@Model.Course.ClassName</h1>
+<p class="text-muted">
+    @Model.Course.Organizer / @Model.Course.EventDateTime.ToString("yyyy-MM-dd HH:mm 'UTC'")
+</p>
+
+<div class="row">
+    <div class="col-md-6 mb-3">
+        <label class="form-label">完了URL</label>
+        <textarea id="completion-url" class="form-control" rows="3" readonly>@Model.CompletionUrl</textarea>
+        <div class="d-flex gap-2 mt-2">
+            <button type="button" class="btn btn-sm btn-outline-secondary" onclick="copyUrl()">URL コピー</button>
+            <button type="button" class="btn btn-sm btn-outline-secondary" onclick="window.print()">印刷</button>
+            <a class="btn btn-sm btn-outline-secondary" href="@Model.QrCodeDataUrl" download="qr-@(Model.Course.Id).png">PNG ダウンロード</a>
+        </div>
+    </div>
+    <div class="col-md-6 mb-3 text-center">
+        <img src="@Model.QrCodeDataUrl" alt="完了URL の QR コード" class="border" style="max-width: 100%;" />
+    </div>
+</div>
+
+<p>
+    <a class="btn btn-link" asp-page="./Index">クラス一覧に戻る</a>
+</p>
+
+@section Scripts {
+    <script>
+        function copyUrl() {
+            const ta = document.getElementById('completion-url');
+            ta.select();
+            ta.setSelectionRange(0, 99999);
+            navigator.clipboard.writeText(ta.value);
+        }
+    </script>
+}
