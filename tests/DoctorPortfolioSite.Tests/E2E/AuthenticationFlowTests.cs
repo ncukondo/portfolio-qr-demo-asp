@@ -11,7 +11,7 @@ namespace DoctorPortfolioSite.Tests.E2E;
 public class AuthenticationFlowTests
 {
     private const string TestEmail = "auth-test@example.com";
-    private const string TestPassword = "StrongP@ss1";
+    private static string TestPassword => TestUserCredentials.Password;
 
     private static readonly Regex AntiForgeryTokenRegex = new(
         @"name=""__RequestVerificationToken""[^>]*value=""(?<token>[^""]+)""",

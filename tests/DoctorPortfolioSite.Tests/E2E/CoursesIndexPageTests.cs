@@ -17,7 +17,7 @@ public class CoursesIndexPageTests
 
     private const string UniqueCourseName = "E2E Sample Course";
     private const string OrganizerEmail = "organizer-e2e@example.com";
-    private const string Password = "StrongP@ss1";
+    private static string Password => TestUserCredentials.Password;
 
     private static readonly Regex AntiForgeryTokenRegex = new(
         @"name=""__RequestVerificationToken""[^>]*value=""(?<token>[^""]+)""",
