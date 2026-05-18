@@ -28,8 +28,8 @@ public class PostgresIntegrationTests
     [Fact]
     public async Task Can_Insert_And_Query_Course_Against_Postgres()
     {
-        var uniqueTitle = $"IT-Course-{Guid.NewGuid()}";
-        var course = Course.Create(uniqueTitle, "desc", 1, Anchor, Anchor.AddHours(1), "venue", 10, $"secret-{Guid.NewGuid()}", Anchor);
+        var uniqueName = $"IT-Course-{Guid.NewGuid()}";
+        var course = Course.Create(uniqueName, "desc", "Org", Anchor, 60, Anchor);
 
         await using var ctx = CreateContext();
         ctx.Courses.Add(course);
@@ -40,7 +40,7 @@ public class PostgresIntegrationTests
             course.Id.Should().BeGreaterThan(0);
 
             var loaded = await ctx.Courses.AsNoTracking().SingleAsync(c => c.Id == course.Id);
-            loaded.Title.Should().Be(uniqueTitle);
+            loaded.ClassName.Should().Be(uniqueName);
         }
         finally
         {
@@ -50,32 +50,27 @@ public class PostgresIntegrationTests
     }
 
     [Fact]
-    public async Task QrToken_Token_Uniqueness_Is_Enforced_By_Postgres()
+    public async Task Credit_Code_Uniqueness_Is_Enforced_By_Postgres()
     {
-        var sharedToken = $"dup-{Guid.NewGuid()}";
-        var course = Course.Create($"IT-Course-{Guid.NewGuid()}", "d", 1, Anchor, Anchor.AddHours(1), "v", 10, $"s-{Guid.NewGuid()}", Anchor);
+        var sharedCode = $"DUP-{Guid.NewGuid()}";
+        var first = Credit.Create(sharedCode, "Label", "Cat", "Desc", Anchor);
 
         await using var ctx = CreateContext();
-        ctx.Courses.Add(course);
-        await ctx.SaveChangesAsync();
-
-        var first = QrToken.Create(course.Id, sharedToken, Anchor.AddMinutes(5), Anchor);
-        ctx.QrTokens.Add(first);
+        ctx.Credits.Add(first);
         await ctx.SaveChangesAsync();
 
         try
         {
             await using var ctx2 = CreateContext();
-            var duplicate = QrToken.Create(course.Id, sharedToken, Anchor.AddMinutes(10), Anchor);
-            ctx2.QrTokens.Add(duplicate);
+            var duplicate = Credit.Create(sharedCode, "Label2", "Cat", "Desc", Anchor);
+            ctx2.Credits.Add(duplicate);
 
             var act = async () => await ctx2.SaveChangesAsync();
             await act.Should().ThrowAsync<DbUpdateException>();
         }
         finally
         {
-            ctx.QrTokens.Remove(first);
-            ctx.Courses.Remove(course);
+            ctx.Credits.Remove(first);
             await ctx.SaveChangesAsync();
         }
     }
