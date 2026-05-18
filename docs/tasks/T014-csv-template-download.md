@@ -2,7 +2,7 @@
 id: T014
 title: CSV テンプレダウンロード (`/Courses/CsvTemplate`)
 phase: 2
-status: todo
+status: done
 depends_on: [T013]
 spec_refs: ["2.2"]
 layer: page
