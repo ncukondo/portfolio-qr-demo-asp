@@ -2,7 +2,7 @@
 id: T009
 title: ドメイン整合 — Credit/ClassCredit 追加・Course 列再設計・Completion 簡略化・QrToken 廃止
 phase: 2
-status: todo
+status: done
 depends_on: [T008]
 spec_refs: ["5.1"]
 layer: domain
