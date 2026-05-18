@@ -1,0 +1,74 @@
+@page
+@model DoctorPortfolioSite.Pages.Courses.ImportModel
+@{
+    ViewData["Title"] = "CSV 一括インポート";
+}
+
+<h1 class="h2 mb-4">CSV 一括インポート</h1>
+
+<p>
+    <a class="btn btn-link p-0" asp-page="./CsvTemplate">テンプレ CSV をダウンロード</a>
+</p>
+
+<form method="post" enctype="multipart/form-data" novalidate>
+    <div class="mb-3">
+        <label asp-for="CsvFile" class="form-label">CSV ファイル (UTF-8, 最大 5MB)</label>
+        <input asp-for="CsvFile" type="file" accept=".csv" class="form-control" />
+        <span asp-validation-for="CsvFile" class="text-danger"></span>
+    </div>
+
+    <button type="submit" class="btn btn-primary">インポート</button>
+</form>
+
+@if (Model.Result is not null)
+{
+    <hr />
+    <h2 class="h4 mt-4">結果</h2>
+
+    @if (!string.IsNullOrEmpty(Model.Result.HeaderError))
+    {
+        <div class="alert alert-danger" role="alert">
+            <strong>ヘッダエラー:</strong> @Model.Result.HeaderError
+        </div>
+    }
+    else
+    {
+        var successCount = Model.Result.Rows.Count(r => r.IsSuccess);
+        var failureCount = Model.Result.Rows.Count - successCount;
+
+        <p>
+            成功: <strong>@successCount</strong> 件 / 失敗: <strong>@failureCount</strong> 件
+        </p>
+
+        <table class="table table-sm">
+            <thead>
+                <tr>
+                    <th scope="col">行</th>
+                    <th scope="col">状態</th>
+                    <th scope="col">クラス名</th>
+                    <th scope="col">メッセージ</th>
+                    <th scope="col">Course ID</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var row in Model.Result.Rows)
+                {
+                    <tr class="@(row.IsSuccess ? "table-success" : "table-warning")">
+                        <td>@(row.LineNumber + 1)</td>
+                        <td>@(row.IsSuccess ? "✓ 成功" : "✗ 失敗")</td>
+                        <td>@row.ClassName</td>
+                        <td>@row.Message</td>
+                        <td>@(row.CourseId?.ToString() ?? "")</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+
+        @if (Model.Result.CreatedCourseIds.Count > 0)
+        {
+            <p>
+                <a class="btn btn-outline-primary" asp-page="./Index">一覧へ戻る</a>
+            </p>
+        }
+    }
+}
