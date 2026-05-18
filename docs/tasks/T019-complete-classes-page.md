@@ -2,7 +2,7 @@
 id: T019
 title: クラス完了処理 Page (`/Complete?token=...`, Participant 権限)
 phase: 2
-status: todo
+status: done
 depends_on: [T016, T009]
 spec_refs: ["2.3", "7.3", "7.4"]
 layer: page
