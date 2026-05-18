@@ -11,6 +11,8 @@ public class Course
     public DateTimeOffset CreatedAt { get; private set; }
     public DateTimeOffset UpdatedAt { get; private set; }
 
+    public ICollection<ClassCredit> Credits { get; private set; } = new List<ClassCredit>();
+
     private Course() { }
 
     public static Course Create(
