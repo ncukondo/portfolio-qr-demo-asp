@@ -9,6 +9,8 @@ secret:
   ignored-matches:
     - name: "Test fixture password for e2e tests"
       match: "StrongP@ss1"
+    - name: "Development-only JWT signing key placeholder"
+      match: "dev-only-jwt-secret-please-replace-32bytes-min"
 
   ignored-paths:
     # Test password fixtures and e2e tests that reference them are not real secrets.
