@@ -2,7 +2,7 @@
 id: T015
 title: CSV 一括インポート Page (`/Courses/Import`)
 phase: 2
-status: todo
+status: done
 depends_on: [T013, T014]
 spec_refs: ["2.2"]
 layer: page
