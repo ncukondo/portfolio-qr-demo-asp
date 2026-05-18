@@ -6,7 +6,9 @@ namespace DoctorPortfolioSite.Infrastructure.Seeding;
 
 public class SampleCourseSeeder
 {
-    private static readonly DateTimeOffset BaseDate = new(2026, 6, 1, 13, 0, 0, TimeSpan.FromHours(9));
+    // Postgres 'timestamp with time zone' via Npgsql requires offset 0 — use UTC anchor.
+    // 04:00 UTC corresponds to 13:00 in JST.
+    private static readonly DateTimeOffset BaseDate = new(2026, 6, 1, 4, 0, 0, TimeSpan.Zero);
 
     public static readonly IReadOnlyList<CourseSeed> DefaultCourses = new[]
     {
