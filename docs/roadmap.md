@@ -43,7 +43,7 @@ PHP 元コード (`ncukondo/portfolio-qr-demo`) のスキーマと機能をベ�
 |---|---|---|---|---|---|
 | T009 | [ドメイン整合: Credit/ClassCredit 追加・Course 列再設計・Completion 簡略化・QrToken 廃止](tasks/T009-realign-domain-with-php.md) | done | T008 | - | - |
 | T010 | [Credits / Courses / Sample users の seed 移植](tasks/T010-seed-credits-courses-users.md) | done | T009 | - | - |
-| T011 | [CourseService (CRUD + 一覧 + クレジット関連付け)](tasks/T011-course-service.md) | todo | T009 | - | - |
+| T011 | [CourseService (CRUD + 一覧 + クレジット関連付け)](tasks/T011-course-service.md) | done | T009 | - | - |
 | T012 | [Courses 一覧 Page (`/Courses`)](tasks/T012-courses-index-page.md) | todo | T011 | - | - |
 | T013 | [Course 登録 Page (`/Courses/Create`, Organizer 権限)](tasks/T013-course-create-page.md) | todo | T011 | - | - |
 | T014 | [CSV テンプレダウンロード (`/Courses/CsvTemplate`)](tasks/T014-csv-template-download.md) | todo | T013 | - | - |
