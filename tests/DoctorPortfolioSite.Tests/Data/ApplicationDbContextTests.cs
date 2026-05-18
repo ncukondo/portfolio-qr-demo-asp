@@ -18,7 +18,7 @@ public class ApplicationDbContextTests
     public async Task Can_Add_And_Query_Course()
     {
         var options = NewInMemoryOptions();
-        var course = Course.Create("CME", "desc", 1, Anchor, Anchor.AddHours(1), "v", 10, "s", Anchor);
+        var course = Course.Create("CME", "desc", "Organizer", Anchor, 60, Anchor);
 
         await using (var ctx = new ApplicationDbContext(options))
         {
@@ -29,90 +29,78 @@ public class ApplicationDbContextTests
         await using (var ctx = new ApplicationDbContext(options))
         {
             var loaded = await ctx.Courses.SingleAsync();
-            loaded.Title.Should().Be("CME");
+            loaded.ClassName.Should().Be("CME");
+            loaded.Organizer.Should().Be("Organizer");
+            loaded.DurationMinutes.Should().Be(60);
             loaded.Id.Should().BeGreaterThan(0);
         }
     }
 
     [Fact]
-    public async Task Can_Add_And_Query_Enrollment()
+    public async Task Can_Add_And_Query_Credit()
     {
         var options = NewInMemoryOptions();
-        var enrollment = Enrollment.Create("user-1", 100, Anchor);
+        var credit = Credit.Create("IT001", "Internal", "Cat", "Desc", Anchor);
 
         await using (var ctx = new ApplicationDbContext(options))
         {
-            ctx.Enrollments.Add(enrollment);
+            ctx.Credits.Add(credit);
             await ctx.SaveChangesAsync();
         }
 
         await using (var ctx = new ApplicationDbContext(options))
         {
-            var loaded = await ctx.Enrollments.SingleAsync();
+            var loaded = await ctx.Credits.SingleAsync();
+            loaded.Code.Should().Be("IT001");
+            loaded.Label.Should().Be("Internal");
+        }
+    }
+
+    [Fact]
+    public async Task Can_Add_And_Query_ClassCredit()
+    {
+        var options = NewInMemoryOptions();
+        var course = Course.Create("CME", "desc", "Org", Anchor, 60, Anchor);
+        var credit = Credit.Create("IT001", "Internal", "Cat", "Desc", Anchor);
+
+        await using (var ctx = new ApplicationDbContext(options))
+        {
+            ctx.Courses.Add(course);
+            ctx.Credits.Add(credit);
+            await ctx.SaveChangesAsync();
+
+            var classCredit = ClassCredit.Create(course.Id, credit.Id, 1.5m, Anchor);
+            ctx.ClassCredits.Add(classCredit);
+            await ctx.SaveChangesAsync();
+        }
+
+        await using (var ctx = new ApplicationDbContext(options))
+        {
+            var loaded = await ctx.ClassCredits.SingleAsync();
+            loaded.CourseId.Should().Be(course.Id);
+            loaded.CreditId.Should().Be(credit.Id);
+            loaded.Amount.Should().Be(1.5m);
+        }
+    }
+
+    [Fact]
+    public async Task Can_Add_And_Query_CourseCompletion()
+    {
+        var options = NewInMemoryOptions();
+        var completion = CourseCompletion.Create("user-1", 100, Anchor, Anchor);
+
+        await using (var ctx = new ApplicationDbContext(options))
+        {
+            ctx.CourseCompletions.Add(completion);
+            await ctx.SaveChangesAsync();
+        }
+
+        await using (var ctx = new ApplicationDbContext(options))
+        {
+            var loaded = await ctx.CourseCompletions.SingleAsync();
             loaded.UserId.Should().Be("user-1");
-            loaded.Status.Should().Be(EnrollmentStatus.Enrolled);
-        }
-    }
-
-    [Fact]
-    public async Task Can_Add_And_Query_Portfolio()
-    {
-        var options = NewInMemoryOptions();
-        var portfolio = Portfolio.Create("user-1", "Title", "desc", "goals", Anchor);
-
-        await using (var ctx = new ApplicationDbContext(options))
-        {
-            ctx.Portfolios.Add(portfolio);
-            await ctx.SaveChangesAsync();
-        }
-
-        await using (var ctx = new ApplicationDbContext(options))
-        {
-            var loaded = await ctx.Portfolios.SingleAsync();
-            loaded.Title.Should().Be("Title");
-            loaded.UserId.Should().Be("user-1");
-        }
-    }
-
-    [Fact]
-    public async Task Can_Add_And_Query_QrToken()
-    {
-        var options = NewInMemoryOptions();
-        var token = QrToken.Create(100, "tok-abc", Anchor.AddMinutes(5), Anchor);
-
-        await using (var ctx = new ApplicationDbContext(options))
-        {
-            ctx.QrTokens.Add(token);
-            await ctx.SaveChangesAsync();
-        }
-
-        await using (var ctx = new ApplicationDbContext(options))
-        {
-            var loaded = await ctx.QrTokens.SingleAsync();
-            loaded.Token.Should().Be("tok-abc");
-            loaded.IsUsed.Should().BeFalse();
-        }
-    }
-
-    [Fact]
-    public async Task Updating_Enrollment_State_Persists()
-    {
-        var options = NewInMemoryOptions();
-        var enrollment = Enrollment.Create("user-1", 100, Anchor);
-
-        await using (var ctx = new ApplicationDbContext(options))
-        {
-            ctx.Enrollments.Add(enrollment);
-            await ctx.SaveChangesAsync();
-            enrollment.MarkCompleted(Anchor.AddHours(2));
-            await ctx.SaveChangesAsync();
-        }
-
-        await using (var ctx = new ApplicationDbContext(options))
-        {
-            var loaded = await ctx.Enrollments.SingleAsync();
-            loaded.Status.Should().Be(EnrollmentStatus.Completed);
-            loaded.CompletedAt.Should().Be(Anchor.AddHours(2));
+            loaded.CourseId.Should().Be(100);
+            loaded.CompletedAt.Should().Be(Anchor);
         }
     }
 }
