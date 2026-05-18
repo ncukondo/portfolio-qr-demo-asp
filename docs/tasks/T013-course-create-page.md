@@ -2,7 +2,7 @@
 id: T013
 title: Course 登録 Page (`/Courses/Create`, Organizer 権限)
 phase: 2
-status: todo
+status: done
 depends_on: [T011]
 spec_refs: ["2.2", "6.2"]
 layer: page
